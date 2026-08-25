@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VocabMaster - Samundramanthan 200 Vocabulary Hub</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+              950: '#1e1b4b',
+            }
+          },
+          fontFamily: {
+            sans: ['Outfit', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            hindi: ['Noto Sans Devanagari', 'Outfit', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <!-- PWA & Mobile Web App Meta -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="VocabMaster">
+  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3389/3389081.png">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased selection:bg-indigo-500 selection:text-white transition-colors duration-200">
+
+  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <header class="sticky top-0 z-40 w-full glass-nav border-b border-slate-200 dark:border-slate-800 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        
+        <!-- Brand Logo -->
+        <div class="flex items-center gap-3 cursor-pointer" onclick="app.navigate('dashboard')">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25">
+            <i data-lucide="book-open-check" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">VocabMaster</span>
+              <span class="text-xs px-2 py-0.5 rounded-full font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-950/80 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">200 Words</span>
+            </div>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Samundramanthan of Vocabulary</p>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs (Desktop) -->
+        <nav class="hidden md:flex items-center space-x-1">
+          <button onclick="app.navigate('dashboard')" data-tab="dashboard" class="nav-tab-btn flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+          </button>
+          <button onclick="app.navigate('study')" data-tab="study" class="nav-tab-btn flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <i data-lucide="book-open" class="w-4 h-4"></i> Study Hub
+          </button>
+          <button onclick="app.navigate('flashcards')" data-tab="flashcards" class="nav-tab-btn flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <i data-lucide="layers" class="w-4 h-4"></i> Flashcards
+          </button>
+          <button onclick="app.navigate('quiz')" data-tab="quiz" class="nav-tab-btn flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <i data-lucide="help-circle" class="w-4 h-4"></i> Mock Test
+          </button>
+          <button onclick="app.navigate('games')" data-tab="games" class="nav-tab-btn flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <i data-lucide="gamepad-2" class="w-4 h-4"></i> Games
+          </button>
+          <button onclick="app.navigate('bookmarks')" data-tab="bookmarks" class="nav-tab-btn flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition relative">
+            <i data-lucide="bookmark" class="w-4 h-4"></i> Saved
+            <span id="nav-bookmark-count" class="hidden ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-500 text-white">0</span>
+          </button>
+        </nav>
+
+        <!-- Right Quick Controls -->
+        <div class="flex items-center gap-2">
+          
+          <!-- Streak Indicator -->
+          <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800/80 text-amber-700 dark:text-amber-300 text-xs font-semibold" title="Current Daily Streak">
+            <i data-lucide="flame" class="w-4 h-4 text-amber-500 fill-amber-500 animate-bounce-sm"></i>
+            <span id="streak-count">1</span> <span class="hidden sm:inline">Day Streak</span>
+          </div>
+
+          <!-- Dark / Light Mode Toggle -->
+          <button onclick="app.toggleTheme()" class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 transition" aria-label="Toggle Theme">
+            <i data-lucide="moon" class="w-4 h-4 hidden dark:block"></i>
+            <i data-lucide="sun" class="w-4 h-4 block dark:hidden"></i>
+          </button>
+
+          <!-- Mobile Menu Button -->
+          <button onclick="app.toggleMobileMenu()" class="md:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 transition">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Navigation -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur px-4 py-3 space-y-1">
+      <button onclick="app.navigate('dashboard'); app.toggleMobileMenu();" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
+        <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+      </button>
+      <button onclick="app.navigate('study'); app.toggleMobileMenu();" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
+        <i data-lucide="book-open" class="w-4 h-4"></i> Study Hub (All 200 Words)
+      </button>
+      <button onclick="app.navigate('flashcards'); app.toggleMobileMenu();" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
+        <i data-lucide="layers" class="w-4 h-4"></i> Flashcards
+      </button>
+      <button onclick="app.navigate('quiz'); app.toggleMobileMenu();" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
+        <i data-lucide="help-circle" class="w-4 h-4"></i> Mock Test Arena
+      </button>
+      <button onclick="app.navigate('games'); app.toggleMobileMenu();" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
+        <i data-lucide="gamepad-2" class="w-4 h-4"></i> Retention Games
+      </button>
+      <button onclick="app.navigate('bookmarks'); app.toggleMobileMenu();" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
+        <i data-lucide="bookmark" class="w-4 h-4"></i> Saved Words
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- ================= VIEW 1: DASHBOARD ================= -->
+    <section id="view-dashboard" class="app-view space-y-6">
+      
+      <!-- Welcome Hero Banner -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-900 via-indigo-800 to-purple-900 text-white p-6 sm:p-8 shadow-xl shadow-indigo-950/20">
+        <div class="relative z-10 max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur border border-white/20 text-xs font-semibold text-indigo-200 mb-3">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-yellow-300"></i> Interactive Vocab Mastery
+          </div>
+          <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight">Samundramanthan Vocabulary</h1>
+          <p class="mt-2 text-sm sm:text-base text-indigo-100/90 leading-relaxed font-hindi">
+            सम्पूर्ण 200 शब्दों का संग्रह — हिंदी अर्थ, समानार्थक (Synonyms) एवं विलोमार्थक (Antonyms) सहित।
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <button onclick="app.startDailyGoalPractice()" class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-indigo-900 font-bold text-sm shadow-lg hover:bg-indigo-50 active:scale-95 transition">
+              <i data-lucide="play" class="w-4 h-4 fill-indigo-900"></i> Start Daily Workout (15 Words)
+            </button>
+            <button onclick="app.navigate('quiz')" class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-sm backdrop-blur border border-white/20 active:scale-95 transition">
+              <i data-lucide="trophy" class="w-4 h-4"></i> Take a Mock Test
+            </button>
+          </div>
+        </div>
+        
+        <!-- Decorative Glow Shapes -->
+        <div class="absolute -top-24 -right-24 w-80 h-80 bg-purple-500/30 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-80 h-80 bg-indigo-500/30 rounded-full blur-3xl pointer-events-none"></div>
+      </div>
+
+      <!-- 4 Key Stat Cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Total Words -->
+        <div class="glass-panel p-5 rounded-2xl">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Total Words</span>
+            <div class="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+              <i data-lucide="book" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <p class="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">200</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-hindi">22 पृष्ठों का पूरा संग्रह</p>
+        </div>
+
+        <!-- Mastered -->
+        <div class="glass-panel p-5 rounded-2xl">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Mastered Words</span>
+            <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+              <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline gap-2 mt-2">
+            <p id="stat-mastered-count" class="text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">0</p>
+            <span id="stat-mastered-pct" class="text-xs font-bold text-slate-500">0%</span>
+          </div>
+          <div class="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
+            <div id="stat-mastered-bar" class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- In Progress -->
+        <div class="glass-panel p-5 rounded-2xl">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">In Learning</span>
+            <div class="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+              <i data-lucide="loader" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <p id="stat-learning-count" class="mt-2 text-2xl sm:text-3xl font-extrabold text-amber-600 dark:text-amber-400">0</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Reviewing actively</p>
+        </div>
+
+        <!-- Saved / Bookmarked -->
+        <div class="glass-panel p-5 rounded-2xl">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Bookmarked</span>
+            <div class="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+              <i data-lucide="bookmark" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <p id="stat-starred-count" class="mt-2 text-2xl sm:text-3xl font-extrabold text-purple-600 dark:text-purple-400">0</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Starred for revision</p>
+        </div>
+
+      </div>
+
+      <!-- Set-wise Progress Jumpers -->
+      <div class="glass-panel p-6 rounded-3xl space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Structured Study Sets</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Master vocabulary in structured 50-word milestones</p>
+          </div>
+          <button onclick="app.navigate('study')" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
+            View all 200 words <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <!-- Set 1 (1 - 50) -->
+          <div onclick="app.studySet(1)" class="p-5 rounded-3xl bg-white dark:bg-slate-900 border-2 border-slate-200/80 dark:border-slate-800 hover:border-indigo-500 dark:hover:border-indigo-500 hover:shadow-lg transition-all duration-200 flex flex-col justify-between cursor-pointer group">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">Set 1</span>
+                <span id="set-1-stat" class="text-xs font-bold text-slate-500 dark:text-slate-400">0/50</span>
+              </div>
+              <h3 class="font-extrabold text-slate-900 dark:text-white mt-3 text-base group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">Words 1 – 50</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Plaudit → Agile</p>
+              <div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full mt-3 overflow-hidden">
+                <div id="set-1-bar" class="bg-indigo-600 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2" onclick="event.stopPropagation()">
+              <button onclick="app.studySet(1)" class="flex-1 py-2 px-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition active:scale-95 text-center flex items-center justify-center gap-1">
+                Study 50 Words →
+              </button>
+              <button onclick="app.flashcardSet(1)" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-950 text-indigo-600 dark:text-indigo-400 text-xs font-bold transition" title="Practice Set 1 Flashcards">
+                <i data-lucide="layers" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Set 2 (51 - 100) -->
+          <div onclick="app.studySet(2)" class="p-5 rounded-3xl bg-white dark:bg-slate-900 border-2 border-slate-200/80 dark:border-slate-800 hover:border-violet-500 dark:hover:border-violet-500 hover:shadow-lg transition-all duration-200 flex flex-col justify-between cursor-pointer group">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300">Set 2</span>
+                <span id="set-2-stat" class="text-xs font-bold text-slate-500 dark:text-slate-400">0/50</span>
+              </div>
+              <h3 class="font-extrabold text-slate-900 dark:text-white mt-3 text-base group-hover:text-violet-600 dark:group-hover:text-violet-400 transition">Words 51 – 100</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Imbecile → Facade</p>
+              <div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full mt-3 overflow-hidden">
+                <div id="set-2-bar" class="bg-violet-600 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2" onclick="event.stopPropagation()">
+              <button onclick="app.studySet(2)" class="flex-1 py-2 px-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs transition active:scale-95 text-center flex items-center justify-center gap-1">
+                Study 50 Words →
+              </button>
+              <button onclick="app.flashcardSet(2)" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-violet-50 dark:hover:bg-violet-950 text-violet-600 dark:text-violet-400 text-xs font-bold transition" title="Practice Set 2 Flashcards">
+                <i data-lucide="layers" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Set 3 (101 - 150) -->
+          <div onclick="app.studySet(3)" class="p-5 rounded-3xl bg-white dark:bg-slate-900 border-2 border-slate-200/80 dark:border-slate-800 hover:border-cyan-500 dark:hover:border-cyan-500 hover:shadow-lg transition-all duration-200 flex flex-col justify-between cursor-pointer group">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-cyan-100 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-300">Set 3</span>
+                <span id="set-3-stat" class="text-xs font-bold text-slate-500 dark:text-slate-400">0/50</span>
+              </div>
+              <h3 class="font-extrabold text-slate-900 dark:text-white mt-3 text-base group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition">Words 101 – 150</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Hapless → Piquant</p>
+              <div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full mt-3 overflow-hidden">
+                <div id="set-3-bar" class="bg-cyan-600 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2" onclick="event.stopPropagation()">
+              <button onclick="app.studySet(3)" class="flex-1 py-2 px-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-xs transition active:scale-95 text-center flex items-center justify-center gap-1">
+                Study 50 Words →
+              </button>
+              <button onclick="app.flashcardSet(3)" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-cyan-50 dark:hover:bg-cyan-950 text-cyan-600 dark:text-cyan-400 text-xs font-bold transition" title="Practice Set 3 Flashcards">
+                <i data-lucide="layers" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Set 4 (151 - 200) -->
+          <div onclick="app.studySet(4)" class="p-5 rounded-3xl bg-white dark:bg-slate-900 border-2 border-slate-200/80 dark:border-slate-800 hover:border-pink-500 dark:hover:border-pink-500 hover:shadow-lg transition-all duration-200 flex flex-col justify-between cursor-pointer group">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-pink-100 text-pink-700 dark:bg-pink-950 dark:text-pink-300">Set 4</span>
+                <span id="set-4-stat" class="text-xs font-bold text-slate-500 dark:text-slate-400">0/50</span>
+              </div>
+              <h3 class="font-extrabold text-slate-900 dark:text-white mt-3 text-base group-hover:text-pink-600 dark:group-hover:text-pink-400 transition">Words 151 – 200</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Commiserate → Maim</p>
+              <div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full mt-3 overflow-hidden">
+                <div id="set-4-bar" class="bg-pink-600 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2" onclick="event.stopPropagation()">
+              <button onclick="app.studySet(4)" class="flex-1 py-2 px-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs transition active:scale-95 text-center flex items-center justify-center gap-1">
+                Study 50 Words →
+              </button>
+              <button onclick="app.flashcardSet(4)" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-pink-50 dark:hover:bg-pink-950 text-pink-600 dark:text-pink-400 text-xs font-bold transition" title="Practice Set 4 Flashcards">
+                <i data-lucide="layers" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Quick Action Modules -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        <!-- 3D Flashcards -->
+        <div onclick="app.navigate('flashcards')" class="glass-panel p-6 rounded-3xl cursor-pointer hover:shadow-lg hover:border-indigo-400 dark:hover:border-indigo-600 transition group">
+          <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+            <i data-lucide="layers" class="w-6 h-6"></i>
+          </div>
+          <h3 class="font-bold text-base text-slate-900 dark:text-white">3D Flashcards</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Interactive card flips with Hindi meanings, synonyms, audio & spaced ratings.</p>
+          <div class="mt-4 flex items-center text-xs font-bold text-indigo-600 dark:text-indigo-400">
+            Launch Flashcards →
+          </div>
+        </div>
+
+        <!-- Mock Test -->
+        <div onclick="app.navigate('quiz')" class="glass-panel p-6 rounded-3xl cursor-pointer hover:shadow-lg hover:border-emerald-400 dark:hover:border-emerald-600 transition group">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+            <i data-lucide="help-circle" class="w-6 h-6"></i>
+          </div>
+          <h3 class="font-bold text-base text-slate-900 dark:text-white">Mock Test Arena</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Synonym/Antonym MCQs, Hindi translation matches, timer, and detailed analytics.</p>
+          <div class="mt-4 flex items-center text-xs font-bold text-emerald-600 dark:text-emerald-400">
+            Take a Quiz →
+          </div>
+        </div>
+
+        <!-- Memory Games -->
+        <div onclick="app.navigate('games')" class="glass-panel p-6 rounded-3xl cursor-pointer hover:shadow-lg hover:border-amber-400 dark:hover:border-amber-600 transition group">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+            <i data-lucide="gamepad-2" class="w-6 h-6"></i>
+          </div>
+          <h3 class="font-bold text-base text-slate-900 dark:text-white">Memory Tile Match</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Fun interactive pairing games to reinforce Hindi meanings & synonyms rapidly.</p>
+          <div class="mt-4 flex items-center text-xs font-bold text-amber-600 dark:text-amber-400">
+            Play Game →
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Featured Word of the Day -->
+      <div id="wotd-card" class="glass-panel p-6 rounded-3xl border-l-4 border-l-indigo-500 space-y-3">
+        <!-- Rendered dynamically -->
+      </div>
+
+    </section>
+
+    <!-- ================= VIEW 2: STUDY HUB ================= -->
+    <section id="view-study" class="app-view hidden space-y-6">
+      
+      <!-- Sticky Controls & Filters Bar -->
+      <div class="glass-panel p-4 sm:p-5 rounded-3xl space-y-4 shadow-sm">
+        
+        <!-- Top Row: Live Search & View Switcher -->
+        <div class="flex flex-col sm:flex-row gap-3 items-center justify-between">
+          
+          <!-- Live Search Bar -->
+          <div class="relative w-full sm:max-w-md">
+            <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="text" id="study-search-input" oninput="app.filterStudyWords()" placeholder="Search word, Hindi meaning, synonym, antonym..." class="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 dark:text-slate-100 placeholder-slate-400">
+            <button id="study-search-clear" onclick="app.clearStudySearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <!-- View Mode Buttons -->
+          <div class="flex items-center gap-1.5 self-end sm:self-auto bg-slate-100 dark:bg-slate-900 p-1 rounded-xl border border-slate-200 dark:border-slate-800">
+            <button onclick="app.setStudyView('grid')" id="btn-view-grid" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm flex items-center gap-1">
+              <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i> Grid
+            </button>
+            <button onclick="app.setStudyView('table')" id="btn-view-table" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 flex items-center gap-1">
+              <i data-lucide="table" class="w-3.5 h-3.5"></i> Table
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Filter Pills & Selectors -->
+        <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-200/60 dark:border-slate-800/60 text-xs">
+          
+          <!-- Set Filter Dropdown -->
+          <select id="study-set-filter" onchange="app.filterStudyWords()" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-medium focus:ring-1 focus:ring-indigo-500">
+            <option value="all">All Sets (1 - 200)</option>
+            <option value="1">Set 1: 1 - 50</option>
+            <option value="2">Set 2: 51 - 100</option>
+            <option value="3">Set 3: 101 - 150</option>
+            <option value="4">Set 4: 151 - 200</option>
+          </select>
+
+          <!-- Status Filter -->
+          <select id="study-status-filter" onchange="app.filterStudyWords()" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-medium focus:ring-1 focus:ring-indigo-500">
+            <option value="all">All Statuses</option>
+            <option value="mastered">✅ Mastered</option>
+            <option value="learning">🔄 In Learning</option>
+            <option value="unlearned">⭕ Not Mastered</option>
+            <option value="starred">⭐ Starred Only</option>
+          </select>
+
+          <!-- Part of Speech Filters -->
+          <div class="flex items-center gap-1 overflow-x-auto py-1">
+            <button onclick="app.setPosFilter('all')" data-pos="all" class="pos-filter-btn px-2.5 py-1 rounded-lg font-semibold bg-indigo-600 text-white">All POS</button>
+            <button onclick="app.setPosFilter('noun')" data-pos="noun" class="pos-filter-btn px-2.5 py-1 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800">Noun</button>
+            <button onclick="app.setPosFilter('verb')" data-pos="verb" class="pos-filter-btn px-2.5 py-1 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800">Verb</button>
+            <button onclick="app.setPosFilter('adjective')" data-pos="adjective" class="pos-filter-btn px-2.5 py-1 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800">Adjective</button>
+            <button onclick="app.setPosFilter('adverb')" data-pos="adverb" class="pos-filter-btn px-2.5 py-1 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800">Adverb</button>
+          </div>
+
+          <!-- Result Count Label -->
+          <span id="study-results-count" class="ml-auto text-xs font-semibold text-slate-500 dark:text-slate-400">
+            Showing 200 words
+          </span>
+
+        </div>
+
+      </div>
+
+      <!-- Card Grid Container -->
+      <div id="study-card-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Rendered dynamically via app.renderStudyCards() -->
+      </div>
+
+      <!-- Table View Container (Hidden by default) -->
+      <div id="study-table-container" class="hidden glass-panel rounded-3xl overflow-hidden shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-100/80 dark:bg-slate-900/80 text-slate-600 dark:text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-800">
+              <tr>
+                <th class="p-3.5">#</th>
+                <th class="p-3.5">Word</th>
+                <th class="p-3.5">POS</th>
+                <th class="p-3.5 font-hindi">Hindi Meaning</th>
+                <th class="p-3.5">Top Synonyms</th>
+                <th class="p-3.5">Top Antonyms</th>
+                <th class="p-3.5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="study-table-body" class="divide-y divide-slate-100 dark:divide-slate-800">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ================= VIEW 3: FLASHCARDS ================= -->
+    <section id="view-flashcards" class="app-view hidden space-y-6 max-w-3xl mx-auto">
+      
+      <!-- Deck Configuration Header -->
+      <div class="glass-panel p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs">
+        
+        <div class="flex items-center gap-2">
+          <label class="font-semibold text-slate-600 dark:text-slate-400">Deck:</label>
+          <select id="flashcard-deck-select" onchange="app.initFlashcardDeck()" class="px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 font-medium">
+            <option value="all">All 200 Words</option>
+            <option value="1">Set 1 (1 - 50)</option>
+            <option value="2">Set 2 (51 - 100)</option>
+            <option value="3">Set 3 (101 - 150)</option>
+            <option value="4">Set 4 (151 - 200)</option>
+            <option value="starred">⭐ Starred Only</option>
+            <option value="unlearned">⭕ Needs Review</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <label class="font-semibold text-slate-600 dark:text-slate-400">Front:</label>
+          <select id="flashcard-front-type" onchange="app.updateFlashcardView()" class="px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 font-medium">
+            <option value="word">English Word</option>
+            <option value="hindi">Hindi Meaning</option>
+          </select>
+
+          <button onclick="app.shuffleFlashcards()" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-semibold flex items-center gap-1">
+            <i data-lucide="shuffle" class="w-3.5 h-3.5"></i> Shuffle
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Flashcard Deck Progress Indicator -->
+      <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 font-medium">
+        <span id="flashcard-progress-text">Card 1 of 200</span>
+        <div class="w-48 bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+          <div id="flashcard-progress-bar" class="bg-indigo-600 h-full rounded-full transition-all" style="width: 0.5%"></div>
+        </div>
+        <span id="flashcard-score-badge" class="font-semibold text-emerald-600 dark:text-emerald-400">0 Mastered</span>
+      </div>
+
+      <!-- 3D Interactive Flashcard Container -->
+      <div class="perspective-1000 w-full min-h-[440px] cursor-pointer" onclick="app.flipFlashcard()">
+        <div id="flashcard-element" class="flashcard-inner relative w-full h-full">
+          
+          <!-- Front Face -->
+          <div class="flashcard-front glass-panel p-8 rounded-3xl border-2 border-indigo-100 dark:border-indigo-900/50 shadow-xl flex flex-col justify-between bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-950">
+            <div class="flex items-center justify-between w-full">
+              <span id="fc-front-badge" class="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
+                #1 • Noun
+              </span>
+              <button onclick="event.stopPropagation(); app.speakCurrentFlashcard()" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-indigo-600 dark:text-indigo-400 transition" title="Pronounce Word">
+                <i data-lucide="volume-2" class="w-5 h-5"></i>
+              </button>
+            </div>
+
+            <div class="my-auto space-y-3 py-6">
+              <h2 id="fc-front-title" class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                PLAUDIT
+              </h2>
+              <p id="fc-front-sub" class="text-sm font-medium text-slate-400">
+                Click anywhere or press [Space] to flip
+              </p>
+            </div>
+
+            <div class="flex items-center justify-center gap-1.5 text-xs text-indigo-500 font-semibold">
+              <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i> Flip Card to see Hindi meanings, Synonyms & Antonyms
+            </div>
+          </div>
+
+          <!-- Back Face -->
+          <div class="flashcard-back glass-panel p-6 sm:p-8 rounded-3xl border-2 border-indigo-300 dark:border-indigo-700 shadow-xl flex flex-col justify-between bg-white dark:bg-slate-900 text-left overflow-y-auto">
+            
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+              <div>
+                <h3 id="fc-back-title" class="text-xl font-extrabold text-indigo-600 dark:text-indigo-400">PLAUDIT</h3>
+                <span id="fc-back-pos" class="text-xs text-slate-400 font-medium">Noun</span>
+              </div>
+              <button onclick="event.stopPropagation(); app.speakCurrentFlashcard()" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
+                <i data-lucide="volume-2" class="w-5 h-5"></i>
+              </button>
+            </div>
+
+            <div class="space-y-4 my-auto py-3">
+              
+              <!-- Hindi Meaning & Synonyms -->
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Synonyms Sense</span>
+                  <span id="fc-back-hindi-syn" class="font-hindi text-sm font-bold text-slate-800 dark:text-slate-200">शाबाशी, प्रशंसा</span>
+                </div>
+                <p id="fc-back-syn-list" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Compliment, Praise, Applause, Acclamation, Ovation, Kudos, Accolade
+                </p>
+              </div>
+
+              <!-- Hindi Meaning & Antonyms -->
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300">Antonyms Sense</span>
+                  <span id="fc-back-hindi-ant" class="font-hindi text-sm font-bold text-slate-800 dark:text-slate-200">आलोचना, निंदा</span>
+                </div>
+                <p id="fc-back-ant-list" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Criticism, Condemnation, Censure, Flak, Diatribe, Tirade, Obloquy
+                </p>
+              </div>
+
+              <!-- Example Sentence -->
+              <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800/80">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Context Example</span>
+                <p id="fc-back-example" class="text-xs italic text-slate-700 dark:text-slate-300 mt-0.5">
+                  "The play received the plaudits of both the audience and the critics."
+                </p>
+              </div>
+
+            </div>
+
+            <div class="text-center text-[11px] text-slate-400 font-medium pt-2 border-t border-slate-100 dark:border-slate-800">
+              Click to flip back
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Spaced Repetition / Rating Buttons -->
+      <div class="glass-panel p-4 rounded-3xl flex items-center justify-between gap-2 shadow-sm">
+        
+        <button onclick="app.prevFlashcard()" class="p-3 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold transition active:scale-95" title="Previous Card (Left Arrow)">
+          <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        </button>
+
+        <div class="flex items-center gap-2 flex-1 justify-center max-w-sm">
+          <button onclick="app.rateFlashcard('hard')" class="flex-1 py-2.5 px-3 rounded-2xl bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/50 dark:hover:bg-rose-900/60 text-rose-700 dark:text-rose-300 text-xs font-bold border border-rose-200 dark:border-rose-800 transition active:scale-95 flex items-center justify-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span> Hard [1]
+          </button>
+          <button onclick="app.rateFlashcard('medium')" class="flex-1 py-2.5 px-3 rounded-2xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/50 dark:hover:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xs font-bold border border-amber-200 dark:border-amber-800 transition active:scale-95 flex items-center justify-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span> Review [2]
+          </button>
+          <button onclick="app.rateFlashcard('easy')" class="flex-1 py-2.5 px-3 rounded-2xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/50 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-xs font-bold border border-emerald-200 dark:border-emerald-800 transition active:scale-95 flex items-center justify-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Mastered [3]
+          </button>
+        </div>
+
+        <button onclick="app.nextFlashcard()" class="p-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold transition active:scale-95" title="Next Card (Right Arrow)">
+          <i data-lucide="chevron-right" class="w-5 h-5"></i>
+        </button>
+
+      </div>
+
+      <!-- Keyboard Navigation Hints -->
+      <div class="text-center text-[11px] text-slate-400 space-x-3">
+        <span><kbd class="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono text-[10px]">Space</kbd> Flip</span>
+        <span><kbd class="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono text-[10px]">←</kbd> Prev</span>
+        <span><kbd class="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono text-[10px]">→</kbd> Next</span>
+        <span><kbd class="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono text-[10px]">1,2,3</kbd> Rate</span>
+      </div>
+
+    </section>
+
+    <!-- ================= VIEW 4: MOCK TEST ARENA ================= -->
+    <section id="view-quiz" class="app-view hidden space-y-6 max-w-3xl mx-auto">
+      
+      <!-- SUB-SCREEN 1: QUIZ SETUP -->
+      <div id="quiz-setup-screen" class="glass-panel p-6 sm:p-8 rounded-3xl space-y-6 shadow-md">
+        
+        <div class="text-center max-w-md mx-auto space-y-2">
+          <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center mx-auto shadow-lg shadow-indigo-500/25">
+            <i data-lucide="help-circle" class="w-6 h-6"></i>
+          </div>
+          <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">Mock Test Arena</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Test your English & Hindi vocabulary retention with exam-like timed multiple-choice questions.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          
+          <!-- Test Type -->
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 dark:text-slate-300">Question Format</label>
+            <select id="quiz-type-select" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm font-medium focus:ring-2 focus:ring-indigo-500">
+              <option value="mixed">🏆 Mega Mixed Mock (All Types)</option>
+              <option value="synonym">🌟 Synonym Challenge (Find the Synonym)</option>
+              <option value="antonym">⚡ Antonym Challenge (Find the Antonym)</option>
+              <option value="en_to_hi">🇮🇳 English Word → Hindi Meaning</option>
+              <option value="hi_to_en">🔤 Hindi Meaning → English Word</option>
+            </select>
+          </div>
+
+          <!-- Word Pool -->
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 dark:text-slate-300">Word Pool</label>
+            <select id="quiz-pool-select" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm font-medium focus:ring-2 focus:ring-indigo-500">
+              <option value="all">All 200 Words (Full Syllabus)</option>
+              <option value="1">Set 1 (Words 1 - 50)</option>
+              <option value="2">Set 2 (Words 51 - 100)</option>
+              <option value="3">Set 3 (Words 101 - 150)</option>
+              <option value="4">Set 4 (Words 151 - 200)</option>
+              <option value="starred">⭐ Starred / Saved Words Only</option>
+            </select>
+          </div>
+
+          <!-- Question Count -->
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 dark:text-slate-300">Number of Questions</label>
+            <select id="quiz-count-select" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm font-medium focus:ring-2 focus:ring-indigo-500">
+              <option value="10">10 Questions (Quick Sprint)</option>
+              <option value="20" selected>20 Questions (Standard Mock)</option>
+              <option value="30">30 Questions (Deep Exam)</option>
+              <option value="50">50 Questions (Full Set)</option>
+            </select>
+          </div>
+
+          <!-- Timer Mode -->
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 dark:text-slate-300">Timer Mode</label>
+            <select id="quiz-timer-select" class="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm font-medium focus:ring-2 focus:ring-indigo-500">
+              <option value="30">30 Seconds Per Question</option>
+              <option value="20">20 Seconds Speed Mode</option>
+              <option value="none">No Timer (Relaxed Practice)</option>
+            </select>
+          </div>
+
+        </div>
+
+        <button onclick="app.startMockTest()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-extrabold text-base shadow-xl shadow-indigo-500/25 active:scale-[0.99] transition flex items-center justify-center gap-2">
+          <i data-lucide="play" class="w-5 h-5 fill-white"></i> Start Mock Exam Now
+        </button>
+
+      </div>
+
+      <!-- SUB-SCREEN 2: ACTIVE QUIZ -->
+      <div id="quiz-active-screen" class="hidden glass-panel p-6 sm:p-8 rounded-3xl space-y-6 shadow-md">
+        
+        <!-- Live Quiz Header -->
+        <div class="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800/80 pb-4">
+          <div class="flex items-center gap-2">
+            <span id="quiz-active-num" class="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
+              Q 1 / 20
+            </span>
+            <span id="quiz-active-type-badge" class="text-xs font-semibold text-slate-500">Synonym Match</span>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div id="quiz-timer-container" class="flex items-center gap-1 px-3 py-1 rounded-full bg-rose-50 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400 font-mono font-bold text-xs">
+              <i data-lucide="timer" class="w-3.5 h-3.5"></i>
+              <span id="quiz-timer-text">30s</span>
+            </div>
+            <button onclick="app.quitQuiz()" class="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">Quit</button>
+          </div>
+        </div>
+
+        <!-- Question Box -->
+        <div class="py-2 text-center space-y-2">
+          <p id="quiz-question-prompt" class="text-xs font-bold tracking-wider uppercase text-indigo-600 dark:text-indigo-400">
+            Select the closest SYNONYM for:
+          </p>
+          <h2 id="quiz-question-word" class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            AUGMENT
+          </h2>
+          <p id="quiz-question-hindi-hint" class="font-hindi text-sm font-semibold text-slate-500 dark:text-slate-400">
+            (हिंदी अर्थ: वृद्धि करना)
+          </p>
+        </div>
+
+        <!-- 4 Multiple Choice Options -->
+        <div id="quiz-options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Dynamic Explanation Box (Shown after selecting answer) -->
+        <div id="quiz-explanation-box" class="hidden p-4 rounded-2xl bg-indigo-50/80 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800 text-xs space-y-2">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Next / Submit Button -->
+        <div class="pt-2 flex justify-end">
+          <button id="quiz-next-btn" onclick="app.nextQuizQuestion()" disabled class="px-6 py-3 rounded-xl bg-indigo-600 text-white font-bold text-sm hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center gap-1.5">
+            Next Question <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- SUB-SCREEN 3: QUIZ RESULTS -->
+      <div id="quiz-results-screen" class="hidden glass-panel p-6 sm:p-8 rounded-3xl space-y-6 shadow-md text-center">
+        
+        <div class="space-y-3">
+          <div class="w-16 h-16 rounded-3xl bg-gradient-to-tr from-amber-400 to-yellow-500 text-white flex items-center justify-center mx-auto shadow-lg shadow-amber-500/25">
+            <i data-lucide="award" class="w-8 h-8"></i>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Mock Test Completed!</h2>
+          <p id="quiz-result-message" class="text-xs text-slate-500 dark:text-slate-400 font-medium">Great effort! Here is your performance breakdown.</p>
+        </div>
+
+        <!-- Score Breakdown Cards -->
+        <div class="grid grid-cols-3 gap-3 max-w-md mx-auto">
+          <div class="p-4 rounded-2xl bg-slate-100 dark:bg-slate-900">
+            <span class="text-[10px] font-bold uppercase text-slate-400">Score</span>
+            <p id="quiz-result-score" class="text-xl sm:text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-0.5">18/20</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-100 dark:bg-slate-900">
+            <span class="text-[10px] font-bold uppercase text-slate-400">Accuracy</span>
+            <p id="quiz-result-accuracy" class="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-0.5">90%</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-100 dark:bg-slate-900">
+            <span class="text-[10px] font-bold uppercase text-slate-400">Time</span>
+            <p id="quiz-result-time" class="text-xl sm:text-2xl font-black text-purple-600 dark:text-purple-400 mt-0.5">3m 12s</p>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap justify-center gap-3 pt-2">
+          <button id="btn-retest-incorrect" onclick="app.retestIncorrectQuestions()" class="hidden px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition">
+            🔄 Retest Missed Questions Only
+          </button>
+          <button onclick="app.resetQuizArena()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition">
+            Take Another Test
+          </button>
+          <button onclick="app.navigate('study')" class="px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs transition">
+            Review in Study Hub
+          </button>
+        </div>
+
+        <!-- Question by Question Review Accordion -->
+        <div class="text-left pt-6 border-t border-slate-200 dark:border-slate-800 space-y-3">
+          <h3 class="font-bold text-sm text-slate-800 dark:text-slate-200">Detailed Answer Review:</h3>
+          <div id="quiz-detailed-review-list" class="space-y-2 text-xs max-h-96 overflow-y-auto pr-1">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ================= VIEW 5: MINI GAMES ================= -->
+    <section id="view-games" class="app-view hidden space-y-6 max-w-3xl mx-auto">
+      
+      <div class="glass-panel p-6 rounded-3xl space-y-4">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+              <i data-lucide="gamepad-2" class="w-5 h-5 text-indigo-600"></i> Memory Tile Match
+            </h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Match English vocabulary words with their corresponding Hindi meaning!</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <select id="game-set-select" onchange="app.initMemoryGame()" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-medium">
+              <option value="all">Random From 200 Words</option>
+              <option value="1">Set 1 (1-50)</option>
+              <option value="2">Set 2 (51-100)</option>
+              <option value="3">Set 3 (101-150)</option>
+              <option value="4">Set 4 (151-200)</option>
+            </select>
+            <button onclick="app.initMemoryGame()" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition">
+              New Game
+            </button>
+          </div>
+        </div>
+
+        <!-- Game Stats Bar -->
+        <div class="flex items-center justify-between bg-slate-100 dark:bg-slate-900 p-3 rounded-2xl text-xs font-semibold">
+          <span class="text-slate-600 dark:text-slate-400">Moves: <strong id="game-moves-count" class="text-slate-900 dark:text-white">0</strong></span>
+          <span class="text-slate-600 dark:text-slate-400">Matched: <strong id="game-matches-count" class="text-emerald-600">0/6 Pairs</strong></span>
+          <span class="text-slate-600 dark:text-slate-400">Time: <strong id="game-timer-text" class="text-indigo-600">00:00</strong></span>
+        </div>
+
+        <!-- Memory Grid Container (12 Tiles) -->
+        <div id="memory-grid-container" class="grid grid-cols-3 sm:grid-cols-4 gap-3 pt-2">
+          <!-- Rendered dynamically -->
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ================= VIEW 6: BOOKMARKS & CHEAT SHEET ================= -->
+    <section id="view-bookmarks" class="app-view hidden space-y-6">
+      
+      <div class="glass-panel p-6 rounded-3xl space-y-4">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+              <i data-lucide="bookmark" class="w-5 h-5 text-amber-500 fill-amber-500"></i> Starred & Bookmarked Words
+            </h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Your personalized high-priority revision deck for tough words.</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-md transition">
+              <i data-lucide="printer" class="w-4 h-4"></i> Print Revision Sheet
+            </button>
+            <button onclick="app.clearAllBookmarks()" class="px-3 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-rose-100 hover:text-rose-600 text-slate-700 dark:text-slate-300 text-xs font-semibold transition">
+              Clear All
+            </button>
+          </div>
+        </div>
+
+        <!-- Bookmarked Words Container -->
+        <div id="bookmarks-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <!-- Rendered dynamically -->
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ================= WORD DETAILS MODAL ================= -->
+  <div id="word-modal" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="glass-panel bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <span id="modal-word-id" class="px-2 py-0.5 rounded text-xs font-extrabold bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">#1</span>
+          <span id="modal-word-pos" class="text-xs font-semibold text-slate-500">Noun</span>
+        </div>
+        <button onclick="app.closeWordModal()" class="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 id="modal-word-title" class="text-2xl font-black text-slate-900 dark:text-white">PLAUDIT</h2>
+          <button onclick="app.speakWord(document.getElementById('modal-word-title').textContent)" class="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 hover:scale-105 transition">
+            <i data-lucide="volume-2" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Synonyms Block -->
+        <div class="p-3.5 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/80 space-y-1.5">
+          <div class="flex items-center gap-2 font-bold text-emerald-800 dark:text-emerald-300 text-xs">
+            <span>Synonyms (समानार्थक)</span>
+            <span id="modal-hindi-syn" class="font-hindi text-sm font-bold text-emerald-700 dark:text-emerald-200">शाबाशी</span>
+          </div>
+          <div id="modal-synonyms-list" class="flex flex-wrap gap-1 text-xs"></div>
+        </div>
+
+        <!-- Antonyms Block -->
+        <div class="p-3.5 rounded-2xl bg-rose-50/70 dark:bg-rose-950/40 border border-rose-200/80 dark:border-rose-800/80 space-y-1.5">
+          <div class="flex items-center gap-2 font-bold text-rose-800 dark:text-rose-300 text-xs">
+            <span>Antonyms (विलोमार्थक)</span>
+            <span id="modal-hindi-ant" class="font-hindi text-sm font-bold text-rose-700 dark:text-rose-200">आलोचना</span>
+          </div>
+          <div id="modal-antonyms-list" class="flex flex-wrap gap-1 text-xs"></div>
+        </div>
+
+        <!-- Context Example -->
+        <div class="p-3.5 rounded-2xl bg-slate-100/70 dark:bg-slate-800/70 text-xs space-y-1">
+          <span class="font-bold text-[10px] uppercase tracking-wider text-slate-400">Context Example</span>
+          <p id="modal-example" class="italic text-slate-700 dark:text-slate-300 leading-relaxed"></p>
+        </div>
+
+      </div>
+
+      <div class="pt-2 flex justify-end">
+        <button onclick="app.closeWordModal()" class="px-5 py-2 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-bold text-xs">
+          Close
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('VocabMaster Service Worker registered successfully!'))
+          .catch(err => console.log('Service worker registration:', err));
+      });
+    }
+  </script>
+
+</body>
+</html>
