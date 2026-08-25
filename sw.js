@@ -1,38 +1,39 @@
-const CACHE_NAME = 'vocabmaster-offline-v3';
-const OFFLINE_URLS = [
-  './',
-  './index.html',
-  './style.css',
-  './data.js',
-  './app.js',
-  './tailwind.min.js',
-  './lucide.min.js',
-  './confetti.min.js',
-  './manifest.json',
-  './icon-192.png',
-  './icon-512.png',
-  './icon-maskable-192.png',
-  './icon-maskable-512.png',
-  './icon-96.png'
+const CACHE_NAME = 'vocabmaster-v5';
+const PRECACHE_ASSETS = [
+  '/',
+  '/index.html',
+  '/style.css',
+  '/data.js',
+  '/app.js',
+  '/tailwind.min.js',
+  '/lucide.min.js',
+  '/confetti.min.js',
+  '/manifest.json',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/icon-maskable-192.png',
+  '/icon-maskable-512.png',
+  '/icon-96.png'
 ];
 
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW] Pre-caching offline assets...');
-      return cache.addAll(OFFLINE_URLS);
-    }).then(() => self.skipWaiting())
+      return Promise.allSettled(
+        PRECACHE_ASSETS.map((url) => cache.add(url).catch((e) => console.log('Precache skip:', url)))
+      );
+    })
   );
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
+    caches.keys().then((keys) => {
       return Promise.all(
-        cacheNames.map((name) => {
-          if (name !== CACHE_NAME) {
-            console.log('[SW] Clearing old cache:', name);
-            return caches.delete(name);
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
           }
         })
       );
@@ -40,43 +41,58 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Cache-First Strategy: Return cached version instantly even with NO internet
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        // Return from cache immediately
-        // Also fetch in background to update cache for next time
-        fetch(event.request).then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, networkResponse.clone());
-            });
+  const request = event.request;
+  const url = new URL(request.url);
+
+  // 1. Navigation requests (Opening the web page / app)
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response && response.status === 200) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((c) => c.put(request, copy));
           }
-        }).catch(() => {
-          // Network failed (offline) - ignore, we already returned cached
-        });
+          return response;
+        })
+        .catch(async () => {
+          // When offline, fall back to cached index.html or root
+          const cached = (await caches.match(request)) || 
+                         (await caches.match('/')) || 
+                         (await caches.match('/index.html')) || 
+                         (await caches.match('./index.html'));
+          if (cached) return cached;
+          return new Response(
+            '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Offline</title></head><body style="font-family:sans-serif;text-align:center;padding:50px;background:#0b0f19;color:#fff;"><h2>VocabMaster is Offline</h2><p>Please open the app once with internet to download all offline content.</p></body></html>',
+            { headers: { 'Content-Type': 'text/html' } }
+          );
+        })
+    );
+    return;
+  }
+
+  // 2. Static Assets (JS, CSS, PNG, JSON) -> Cache First with Network Fallback
+  event.respondWith(
+    caches.match(request).then((cachedResponse) => {
+      if (cachedResponse) {
         return cachedResponse;
       }
-
-      // If not in cache, fetch from network and cache it
-      return fetch(event.request).then((networkResponse) => {
-        if (!networkResponse || networkResponse.status !== 200) {
-          return networkResponse;
-        }
-        const responseToCache = networkResponse.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
+      return fetch(request)
+        .then((response) => {
+          if (response && response.status === 200) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((c) => c.put(request, copy));
+          }
+          return response;
+        })
+        .catch(async () => {
+          const fallback = await caches.match(url.pathname);
+          if (fallback) return fallback;
+          return new Response('', { status: 408, statusText: 'Offline Asset Unavailable' });
         });
-        return networkResponse;
-      }).catch(() => {
-        // If navigation request fails, return cached index.html
-        if (event.request.mode === 'navigate') {
-          return caches.match('./index.html') || caches.match('/');
-        }
-      });
     })
   );
 });

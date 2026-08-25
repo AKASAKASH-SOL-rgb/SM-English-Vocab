@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "cleanUrls": true,
   "rewrites": [
     {
       "source": "/.well-known/assetlinks.json",
@@ -9,12 +8,8 @@
   ],
   "headers": [
     {
-      "source": "/.well-known/assetlinks.json",
+      "source": "/(.*)",
       "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/json"
-        },
         {
           "key": "Access-Control-Allow-Origin",
           "value": "*"
@@ -22,15 +17,24 @@
       ]
     },
     {
-      "source": "/assetlinks.json",
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/javascript"
+        }
+      ]
+    },
+    {
+      "source": "/.well-known/assetlinks.json",
       "headers": [
         {
           "key": "Content-Type",
           "value": "application/json"
-        },
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
         }
       ]
     }
