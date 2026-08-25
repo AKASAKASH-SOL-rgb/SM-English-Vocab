@@ -1,24 +1,81 @@
 {
+  "id": "/index.html",
   "name": "VocabMaster - Samundramanthan 200",
   "short_name": "VocabMaster",
-  "description": "Interactive English & Hindi 200 Vocabulary Study & Mock Test Hub",
+  "description": "Interactive English & Hindi 200 Vocabulary Study, 3D Flashcards, and Mock Test Hub based on Rani Ma'am Samundramanthan",
+  "lang": "en",
+  "dir": "ltr",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "window-controls-overlay"],
   "background_color": "#0b0f19",
   "theme_color": "#4f46e5",
-  "orientation": "portrait-primary",
+  "orientation": "any",
+  "categories": ["education", "books", "productivity", "utilities"],
   "icons": [
     {
       "src": "https://cdn-icons-png.flaticon.com/512/3389/3389081.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3389/3389081.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "https://cdn-icons-png.flaticon.com/512/3389/3389081.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3389/3389081.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Study Hub",
+      "short_name": "Study",
+      "description": "Browse all 200 vocabulary words with Hindi meanings",
+      "url": "./index.html#study",
+      "icons": [{ "src": "https://cdn-icons-png.flaticon.com/512/3389/3389081.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "3D Flashcards",
+      "short_name": "Flashcards",
+      "description": "Practice vocabulary with 3D flip flashcards",
+      "url": "./index.html#flashcards",
+      "icons": [{ "src": "https://cdn-icons-png.flaticon.com/512/3389/3389081.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Mock Test",
+      "short_name": "Mock Test",
+      "description": "Take a timed MCQ vocabulary mock exam",
+      "url": "./index.html#quiz",
+      "icons": [{ "src": "https://cdn-icons-png.flaticon.com/512/3389/3389081.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=1280&h=720&fit=crop",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "VocabMaster Study Hub & Dashboard"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=720&h=1280&fit=crop",
+      "sizes": "720x1280",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "VocabMaster Flashcards & Quizzes"
     }
   ]
 }
